@@ -1,0 +1,73 @@
+#--
+生成的源代码格式如下：
+
+package com.xxx;
+import com.jfinal.aop.Invocation;
+
+public class Target$$EnhancerByJFinal extends Target {
+	public String test(String p0, int p1) {
+		Invocation inv = new Invocation(this, 123L,
+			args -> {
+				return super.test(
+							(String)args[0],
+							(int)args[1]
+						);
+			},
+			p0, p1);
+		
+		inv.invoke();
+		
+		return inv.getReturnValue();
+	}
+}
+--#
+
+package #(pkg);
+import com.jfinal.aop.Invocation;
+public class #(name)#(classTypeVars) extends #(targetName)#(targetTypeVars) {
+#for(x : methodList)
+	
+	public #(x.methodTypeVars) #(x.returnType) #(x.name)(#for(y : x.paraTypes)#(y) p#(for.index)#(for.last ? "" : ", ")#end) #(x.throws){
+		#if(x.singleArrayPara)
+		#@newInvocationForSingleArrayPara()
+		#else
+		#@newInvocationForCommon()
+		#end
+		
+		inv.invoke();
+		#if (x.returnType != "void")
+		
+		return inv.getReturnValue();
+		#end
+	}
+#end
+}
+
+#--
+   一般参数情况
+--#
+#define newInvocationForCommon()
+		Invocation inv = new Invocation(this, #(x.proxyMethodKey)L,
+			args -> {
+				#(x.frontReturn) #(name).super.#(x.name)(
+						#for(y : x.paraTypes)
+						(#(y.replace("...", "[]")))args[#(for.index)]#(for.last ? "" : ",")
+						#end
+					);
+				#(x.backReturn)
+			}
+			#for(y : x.paraTypes), p#(for.index)#end);
+#end
+#--
+   只有一个参数，且该参数是数组或者可变参数
+--#
+#define newInvocationForSingleArrayPara()
+		Invocation inv = new Invocation(this, #(x.proxyMethodKey)L,
+			args -> {
+				#(x.frontReturn) #(name).super.#(x.name)(
+						p0
+					);
+				#(x.backReturn)
+			}
+			, p0);
+#end

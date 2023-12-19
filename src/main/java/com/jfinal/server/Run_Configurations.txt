@@ -1,0 +1,10 @@
+Run Configurations... / Debug Configurations...
+
+1: Main
+    project(required) ---> your_project_name
+    Main class(required) ---> com.jfinal.core.JFinal
+
+2: Argument
+    Program arguments(optional) ---> src/main/webapp 80 / 5
+
+
