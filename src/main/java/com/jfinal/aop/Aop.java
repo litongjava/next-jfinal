@@ -12,6 +12,7 @@ import com.jfinal.aop.annotation.Service;
 import com.jfinal.aop.process.BeanProcess;
 import com.jfinal.aop.process.BeforeStartConfigurationProcess;
 import com.jfinal.aop.scaner.ComponentScanner;
+import com.jfinal.core.Path;
 import com.jfinal.model.DestroyableBean;
 
 /**
@@ -139,7 +140,9 @@ public class Aop {
         //
         || clazz.isAnnotationPresent(Repository.class)
         //
-        || clazz.isAnnotationPresent(HttpApi.class);
+        || clazz.isAnnotationPresent(HttpApi.class)
+        //
+        || clazz.isAnnotationPresent(Path.class);
   }
 
   public static boolean isConfiguration(Class<?> clazz) {

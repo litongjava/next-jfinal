@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.jfinal.servlet.ServletOutputStream;
+import com.litongjava.tio.http.common.HttpResponse;
 
 /**
  * HttpServletResponse 使用太广泛,支持一下,但是内部使用HttpResponse实现
@@ -33,5 +34,7 @@ public interface HttpServletResponse {
   ServletOutputStream getOutputStream();
 
   void setDateHeader(String string, int i);
+
+  HttpResponse finish();
 
 }

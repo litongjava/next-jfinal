@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.litongjava</groupId>
-  <artifactId>next-next-jfinal</artifactId>
+  <artifactId>next-jfinal</artifactId>
   <version>5.1.5</version>
   <packaging>jar</packaging>
 
@@ -14,6 +14,13 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    <tio-version>3.7.3.v20231218-RELEASE</tio-version>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <logback-version>1.4.11</logback-version>
+    <lombok-version>1.18.30</lombok-version>
+    <commons-io.version>2.10.0</commons-io.version>
   </properties>
 
   <issueManagement>
@@ -67,11 +74,77 @@
       <artifactId>slf4j-api</artifactId>
       <version>1.7.25</version>
     </dependency>
-
+    
+    <!--
     <dependency>
       <groupId>com.litongjava</groupId>
       <artifactId>tio-server</artifactId>
       <version>3.7.3.v20231218-RELEASE</version>
+    </dependency>
+    -->
+    <!--生产环境使用tio-server-->
+
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons-io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.thoughtworks.paranamer</groupId>
+      <artifactId>paranamer</artifactId>
+      <version>2.8</version>
+    </dependency>
+    <dependency>
+      <groupId>com.esotericsoftware</groupId>
+      <artifactId>reflectasm</artifactId>
+      <version>1.11.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.litongjava</groupId>
+      <artifactId>tio-http-server</artifactId>
+      <version>${tio-version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.t-io/tio-websocket-server -->
+    <dependency>
+      <groupId>com.litongjava</groupId>
+      <artifactId>tio-websocket-server</artifactId>
+      <version>${tio-version}</version>
+    </dependency>
+
+    <!-- slf4j-logback绑定 -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback-version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <scope>provided</scope>
+      <version>2.3.31</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok-version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-all</artifactId>
+      <version>5.8.23</version>
     </dependency>
 
     <!-- log4j 日志 -->
