@@ -91,13 +91,16 @@ public class DefaultHttpServletResponse implements HttpServletResponse {
 
   }
 
-  public HttpResponse finish() {
+  public HttpResponse finish() throws IOException {
     if (printWriter != null) {
       printWriter.flush();
+      printWriter.close();
     }
     if (outputStream != null) {
       // 将输出流转换为字节数组
       byte[] bytes = outputStream.toByteArray();
+      outputStream.reset();
+      outputStream.close();
       httpResponse.setBody(bytes);
       
     }

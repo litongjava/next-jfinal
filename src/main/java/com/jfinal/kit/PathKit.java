@@ -1,23 +1,18 @@
 /**
  * Copyright (c) 2011-2023, James Zhan 詹波 (jfinal@126.com).
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package com.jfinal.kit;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 /**
  * new File("..\path\abc.txt") 中的三个方法获取路径的方法
@@ -33,124 +28,127 @@ import java.io.UnsupportedEncodingException;
  * 4：ClassLoader.getResource("") 将获取 class path 根目录，与 PathKit.class.getResource("/") 一样
  */
 public class PathKit {
-	
-	private static String webRootPath;
-	private static String rootClassPath;
-	
-	@SuppressWarnings("rawtypes")
-	public static String getPath(Class clazz) {
-		String path = clazz.getResource("").getPath();
-		return new File(path).getAbsolutePath();
-	}
-	
-	public static String getPath(Object object) {
-		String path = object.getClass().getResource("").getPath();
-		return new File(path).getAbsolutePath();
-	}
-	
-	// 注意：命令行返回的是命令行所在的当前路径
-	public static String getRootClassPath() {
-		if (rootClassPath == null) {
-			try {
-				// String path = PathKit.class.getClassLoader().getResource("").toURI().getPath();
-				String path = getClassLoader().getResource("").toURI().getPath();
-				rootClassPath = new File(path).getAbsolutePath();
-			}
-			catch (Exception e) {
-				// String path = PathKit.class.getClassLoader().getResource("").getPath();
-				// String path = getClassLoader().getResource("").getPath();
-				// rootClassPath = new File(path).getAbsolutePath();
-				
-				try {
-					String path = PathKit.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-					path = java.net.URLDecoder.decode(path, "UTF-8");
-					if (path.endsWith(File.separator)) {
-						path = path.substring(0, path.length() - 1);
-					}
-					rootClassPath = path;
-				} catch (UnsupportedEncodingException e1) {
-					throw new RuntimeException(e1);
-				}
-			}
-		}
-		return rootClassPath;
-	}
-	
-	/**
-	 * 优先使用 current thread 所使用的 ClassLoader 去获取路径
-	 * 否则在某些情况下会获取到 tomcat 的 ClassLoader，那么路径值将是
-	 * TOMCAT_HOME/lib
-	 * 
-	 * issue: https://gitee.com/jfinal/jfinal/issues/ID428#note_699360
-	 */
-	private static ClassLoader getClassLoader() {
-		ClassLoader ret = Thread.currentThread().getContextClassLoader();
-		return ret != null ? ret : PathKit.class.getClassLoader();
-	}
-	
-	public static void setRootClassPath(String rootClassPath) {
-		PathKit.rootClassPath = rootClassPath;
-	}
-	
-	public static String getPackagePath(Object object) {
-		Package p = object.getClass().getPackage();
-		return p != null ? p.getName().replaceAll("\\.", "/") : "";
-	}
-	
-	public static File getFileFromJar(String file) {
-		throw new RuntimeException("Not finish. Do not use this method.");
-	}
-	
-	public static String getWebRootPath() {
-		if (webRootPath == null) {
-			webRootPath = detectWebRootPath();
-		}
-		return webRootPath;
-	}
-	
-	public static void setWebRootPath(String webRootPath) {
-		if (webRootPath == null) {
-			return ;
-		}
-		
-		if (webRootPath.endsWith(File.separator)) {
-			webRootPath = webRootPath.substring(0, webRootPath.length() - 1);
-		}
-		PathKit.webRootPath = webRootPath;
-	}
-	
-	// 注意：命令行返回的是命令行所在路径的上层的上层路径
-	private static String detectWebRootPath() {
-		try {
-			String path = PathKit.class.getResource("/").toURI().getPath();
-			String ret = new File(path).getParentFile().getParentFile().getCanonicalPath();
-			// 支持 maven 项目在开发环境下探测 webRootPath
-			if (path.endsWith("/target/classes/")) {
-				return ret + "/src/main/webapp";
-			} else if (path.endsWith("\\target\\classes\\")) {
-				return ret + "\\src\\main\\webapp";
-			} else {
-				return ret;
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	public static boolean isAbsolutePath(String path) {
-		return path.startsWith("/") || path.indexOf(':') == 1;
-	}
-	
-	/*
-	private static String detectWebRootPath() {
-		try {
-			String path = PathKit.class.getResource("/").getFile();
-			return new File(path).getParentFile().getParentFile().getCanonicalPath();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	*/
+
+  private static String webRootPath;
+  private static String rootClassPath;
+
+  @SuppressWarnings("rawtypes")
+  public static String getPath(Class clazz) {
+    String path = clazz.getResource("").getPath();
+    return new File(path).getAbsolutePath();
+  }
+
+  public static String getPath(Object object) {
+    String path = object.getClass().getResource("").getPath();
+    return new File(path).getAbsolutePath();
+  }
+
+  // 注意：命令行返回的是命令行所在的当前路径
+  public static String getRootClassPath() {
+    if (rootClassPath == null) {
+      try {
+        // String path = PathKit.class.getClassLoader().getResource("").toURI().getPath();
+        String path = getClassLoader().getResource("").toURI().getPath();
+        rootClassPath = new File(path).getAbsolutePath();
+      } catch (Exception e) {
+        // String path = PathKit.class.getClassLoader().getResource("").getPath();
+        // String path = getClassLoader().getResource("").getPath();
+        // rootClassPath = new File(path).getAbsolutePath();
+
+        try {
+          String path = PathKit.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+          path = java.net.URLDecoder.decode(path, "UTF-8");
+          if (path.endsWith(File.separator)) {
+            path = path.substring(0, path.length() - 1);
+          }
+          rootClassPath = path;
+        } catch (UnsupportedEncodingException e1) {
+          throw new RuntimeException(e1);
+        }
+      }
+    }
+    return rootClassPath;
+  }
+
+  /**
+   * 优先使用 current thread 所使用的 ClassLoader 去获取路径
+   * 否则在某些情况下会获取到 tomcat 的 ClassLoader，那么路径值将是
+   * TOMCAT_HOME/lib
+   * 
+   * issue: https://gitee.com/jfinal/jfinal/issues/ID428#note_699360
+   */
+  private static ClassLoader getClassLoader() {
+    ClassLoader ret = Thread.currentThread().getContextClassLoader();
+    return ret != null ? ret : PathKit.class.getClassLoader();
+  }
+
+  public static void setRootClassPath(String rootClassPath) {
+    PathKit.rootClassPath = rootClassPath;
+  }
+
+  public static String getPackagePath(Object object) {
+    Package p = object.getClass().getPackage();
+    return p != null ? p.getName().replaceAll("\\.", "/") : "";
+  }
+
+  public static File getFileFromJar(String file) {
+    throw new RuntimeException("Not finish. Do not use this method.");
+  }
+
+  public static String getWebRootPath() {
+    if (webRootPath == null) {
+      webRootPath = detectWebRootPath();
+    }
+    return webRootPath;
+  }
+
+  public static void setWebRootPath(String webRootPath) {
+    if (webRootPath == null) {
+      return;
+    }
+
+    if (webRootPath.endsWith(File.separator)) {
+      webRootPath = webRootPath.substring(0, webRootPath.length() - 1);
+    }
+    PathKit.webRootPath = webRootPath;
+  }
+
+  // 注意：命令行返回的是命令行所在路径的上层的上层路径
+  private static String detectWebRootPath() {
+    try {
+      URL resource = PathKit.class.getResource("/");
+      if (resource == null) {
+        return System.getProperty("user.dir");
+      }
+      System.out.println(resource);
+      String path = resource.toURI().getPath();
+      if(path==null) {
+        return System.getProperty("user.dir");
+      }
+      System.out.println(path);
+      File file = new File(path);
+      System.out.println(file);
+      String ret = file.getParentFile().getParentFile().getCanonicalPath();
+      // 支持 maven 项目在开发环境下探测 webRootPath
+      if (path.endsWith("/target/classes/")) {
+        return ret + "/src/main/webapp";
+      } else if (path.endsWith("\\target\\classes\\")) {
+        return ret + "\\src\\main\\webapp";
+      } else {
+        return ret;
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static boolean isAbsolutePath(String path) {
+    return path.startsWith("/") || path.indexOf(':') == 1;
+  }
+
+  /*
+   * private static String detectWebRootPath() { try { String path = PathKit.class.getResource("/").getFile(); return new File(path).getParentFile().getParentFile().getCanonicalPath(); } catch (IOException e) { throw new RuntimeException(e); } }
+   */
 }
-
-

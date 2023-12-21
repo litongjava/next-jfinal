@@ -16,12 +16,12 @@ import com.litongjava.tio.http.server.util.Resps;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class JFinaltHttpRequestHandler implements HttpRequestHandler {
+public class JFinalHttpRequestHandler implements HttpRequestHandler {
   private HttpConfig httpConfig;
   private Handler handler;
   private int contextPathLength;
 
-  public JFinaltHttpRequestHandler(HttpConfig httpConfig, DefaultHttpServerInterceptor defaultHttpServerInterceptor) {
+  public JFinalHttpRequestHandler(HttpConfig httpConfig, DefaultHttpServerInterceptor defaultHttpServerInterceptor) {
     this.httpConfig = httpConfig;
     String contextPath = httpConfig.getContextPath();
     this.contextPathLength = contextPath != null && !"/".equals(contextPath) ? contextPath.length() : 0;

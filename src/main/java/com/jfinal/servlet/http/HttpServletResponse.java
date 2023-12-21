@@ -35,6 +35,6 @@ public interface HttpServletResponse {
 
   void setDateHeader(String string, int i);
 
-  HttpResponse finish();
+  HttpResponse finish() throws IOException;
 
 }

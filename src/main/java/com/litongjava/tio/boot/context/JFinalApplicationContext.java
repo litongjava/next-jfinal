@@ -13,7 +13,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.handler.Handler;
 import com.jfinal.servlet.ServletContext;
 import com.litongjava.tio.boot.constatns.ConfigKeys;
-import com.litongjava.tio.boot.http.handler.JFinaltHttpRequestHandler;
+import com.litongjava.tio.boot.http.handler.JFinalHttpRequestHandler;
 import com.litongjava.tio.boot.http.handler.TioBootHttpRoutes;
 import com.litongjava.tio.boot.http.interceptor.DefaultHttpServerInterceptor;
 import com.litongjava.tio.boot.server.TioBootServer;
@@ -106,7 +106,7 @@ public class JFinalApplicationContext implements Context {
 
     // 第二个参数也可以是数组,自动考试扫描handler的路径
     HttpRequestHandler requestHandler = null;
-    JFinaltHttpRequestHandler jfinalHttpRequestHandler = null;
+    JFinalHttpRequestHandler jfinalHttpRequestHandler = null;
     TioBootHttpRoutes routes = null;
     try {
       requestHandler = AopManager.me().getAopFactory().getOnly(HttpRequestHandler.class);
@@ -117,7 +117,7 @@ public class JFinalApplicationContext implements Context {
 
         DefaultHttpServerInterceptor defaultHttpServerInterceptor = Aop.get(DefaultHttpServerInterceptor.class);
 
-        jfinalHttpRequestHandler = new JFinaltHttpRequestHandler(httpConfig, defaultHttpServerInterceptor);
+        jfinalHttpRequestHandler = new JFinalHttpRequestHandler(httpConfig, defaultHttpServerInterceptor);
       }
       //
     } catch (Exception e) {
