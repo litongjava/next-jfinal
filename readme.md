@@ -33,3 +33,12 @@ next-jfinal是下一代jfinal开发框架,和jfinal不同的是next-jfinal移除
 ![架构图](readme_files/1.png)
 ## 流程图
 ![流程图](readme_files/2.png)
+- 1.当服务器接收到一个请求时，该请求首先由 TioServer 接收，此时数据仍处于 TCP 数据包的形式。Tio-server 随后调用 TioBootServerHandler 来处理这些数据；TioBootServerHandler 是 ServerAioHandler 的一个实现。
+
+- 2.在处理过程中，TioBootServerHandler 会根据协议类型（TCP, WebSocket, HTTP）进行协议解析并判断如何进一步处理请求。若识别为 HTTP 请求，则会传递给 HttpServerAioHandler 来进行处理。
+
+- 3.HttpServerAioHandler会检查请求是否合法(IP白名单和和名单的判断),如果合法这交由JFinalHttpRequestHandler处理.
+
+- 4.JFinalHttpRequestHandler 负责创建 DefaultHttpServletRequest 和 DefaultHttpServletResponse 对象，并将这些对象传递给 com.jfinal.core.ActionHandler。
+
+- 5.ActionHandler 接着执行路由查找和调用Jfinal Controller的操作，最终将处理结果封装在 DefaultHttpServletResponse 中并返回。这个过程确保了 HTTP 请求能够被正确解析、处理，并得到相应的响应。
